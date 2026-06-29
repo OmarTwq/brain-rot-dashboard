@@ -68,14 +68,23 @@ def load_data(file):
 st.sidebar.title("🧠 Brain Rot Analytics")
 st.sidebar.caption("لوحة تحليل أثر السوشل ميديا على الصحة النفسية للطلاب")
 
-uploaded_file = st.sidebar.file_uploader("📂 رفع ملف البيانات (CSV)", type=["csv"])
+DEFAULT_DATA_PATH = "data.csv"
 
-if uploaded_file is None:
+import os
+data_source = None
+if os.path.exists(DEFAULT_DATA_PATH):
+    data_source = DEFAULT_DATA_PATH
+    st.sidebar.success("✅ البيانات محمّلة تلقائيًا (data.csv)")
+else:
+    uploaded_file = st.sidebar.file_uploader("📂 رفع ملف البيانات (CSV)", type=["csv"])
+    data_source = uploaded_file
+
+if data_source is None:
     st.title("🧠 Student Social Media & Mental Health — Brain Rot Dashboard")
     st.info("⬅️ ابدأ برفع ملف **Student Social Media And Mental Health Impact.csv** من الشريط الجانبي لعرض الداشبورد.")
     st.stop()
 
-df = load_data(uploaded_file)
+df = load_data(data_source)
 
 # =========================================================
 # الفلاتر الجانبية — الفلتر الرئيسي: Stress_Level
